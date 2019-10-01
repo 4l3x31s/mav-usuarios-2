@@ -1,0 +1,36 @@
+.fondo-login {
+    background-image: url("../../assets/image/login.png") !important;
+    position: absolute;
+    background-repeat: no-repeat;
+    width: 100%;
+    height: 100%;
+    background-position: center;
+    background-size: cover;
+  }
+  img {
+      width: 350px;
+      margin: auto;
+  }
+  h1 {
+      text-align: center !important;
+  }
+  
+  .fondo-transparente {
+    // background: inherit;
+    // background-color: transparent !important;
+    border-radius: 10px !important;
+  }
+  .texto-inicio a {
+    color: white;
+    font-size: 13px;
+    text-decoration: underline;
+  }
+  .espacio-login {
+    height: 5px !important;
+    width: 100% !important;
+  }
+  .padding-login {
+    padding-left: 10% !important;
+    padding-right: 10% !important;
+  }
+  
