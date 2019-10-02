@@ -18,22 +18,21 @@ import { UserParamService } from '../services/user-param.service';
   styleUrls: ['./login.page.scss'],
 })
 export class LoginPage implements OnInit {
-  form: FormGroup;
   public user: string;
   public pass: string;
   public conductora: MdlConductora;
 
   constructor(
-    public fb: FormBuilder,
     public loadingService: LoadingService,
     public navController: NavController,
     public alertService: AlertService,
     public events: Events,
     public authService: AuthService,
     public alertController: AlertController,
-    private storageService: StorageService,
+    public storageService: StorageService,
     public userParam: UserParamService,
-    public toastController: ToastService
+    public toastController: ToastService,
+    
   ) {
     navigator.geolocation.getCurrentPosition((resp) => {
     }, (error) => {
@@ -41,78 +40,17 @@ export class LoginPage implements OnInit {
   }
 
   ngOnInit() {
-    this.iniciaValidaciones();
-    this.loadItems();
+    //this.loadItems();
   }
-  iniciaValidaciones() {
-    this.form = this.fb.group({
-      vuser: ['', [
-        Validators.required,
-      ]],
-      vpass: ['', [
-        Validators.required,
-      ]]
-    });
-  }
-  get f(): any { return this.form.controls; }
 
   ingresar() {
+    this.authService.doGoogleLogin()
+    .then( res => {
+      console.log(res);
+      this.navController.navigateRoot('/home');
+    }).catch(err => {
+      console.log(err);
+    })
+  }
 
-  }
-  registrar() {
-    this.navController.navigateRoot('/detalle-cliente');
-  }
-  async presentAlertPrompt() {
-    const alert = await this.alertController.create({
-      header: 'Recuperación Contraseña',
-      message: 'Ingrese su correo electrónico.',
-      inputs: [
-        {
-          name: 'txtEmailPop',
-          type: 'text',
-          placeholder: 'ejemplo@ejemplo.com',
-          label: 'Email'
-        }
-      ],
-      buttons: [
-        {
-          text: 'Cancelar',
-          role: 'cancel',
-          cssClass: 'secondary',
-          handler: () => {
-          }
-        }, {
-          text: 'Enviar',
-          handler: (data) => {
-            if (data.txtEmailPop.length > 0) {
-              this.authService.resetPassword(data.txtEmailPop)
-              .then( () => {
-                this.toastController.presentToast('Se ha enviado el correo.');
-              }, err => {
-                this.toastController.presentToast('Hubo un error al enviar el correo.');
-              })
-            } else {
-              this.toastController.presentToast('Debe ingresar un correo válido.');
-            }
-          }
-        }
-      ]
-    });
-
-    await alert.present();
-  }
-  enviarCorreo() {
-    this.presentAlertPrompt();
-  }
-  loadItems() {
-    this.storageService.getItems().then(items => {
-      let lstUsuarios:Array<MdlConductora> = items;
-      if(lstUsuarios) {
-        this.events.publish('user:login');
-        this.conductora = lstUsuarios[0];
-        this.userParam.set(this.conductora);
-        this.navController.navigateRoot('/home');
-      }
-    });
-  }
 }

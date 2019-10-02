@@ -1,3 +1,4 @@
+import { IonicStorageModule } from '@ionic/storage';
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { RouteReuseStrategy } from '@angular/router';
@@ -9,7 +10,6 @@ import { StatusBar } from '@ionic-native/status-bar/ngx';
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
 
-import { IonicStorageModule } from '@ionic/storage';
 import { HttpClientModule } from '@angular/common/http';
 import { AngularFireModule } from '@angular/fire';
 import { AngularFireDatabaseModule, AngularFireDatabase } from '@angular/fire/database';
@@ -18,6 +18,8 @@ import { AngularFireStorageModule } from '@angular/fire/storage';
 import { FCM } from '@ionic-native/fcm/ngx';
 import { InAppBrowser } from '@ionic-native/in-app-browser/ngx';
 import { AngularFirestoreModule } from '@angular/fire/firestore';
+import { StorageService } from './services/storage.service';
+import { Geolocation } from '@ionic-native/geolocation/ngx';
 
 export const firebaseConfig = {
   apiKey: 'AIzaSyCC22o8Imks6DbAf4DXrxgtW_wPE6XYLHs',
@@ -40,10 +42,10 @@ export const firebaseConfig = {
     HttpClientModule,
     AngularFireModule.initializeApp(firebaseConfig),
     AngularFireDatabaseModule,
-    AngularFireAuthModule,
     AngularFireStorageModule,
-    AngularFirestoreModule, // imports firebase/firestore, only needed for database features
-    
+    AngularFirestoreModule,
+    AngularFireAuthModule
+
   ],
   providers: [
     StatusBar,
@@ -51,6 +53,8 @@ export const firebaseConfig = {
     AngularFireDatabase,
     FCM,
     InAppBrowser,
+    StorageService,
+    Geolocation,
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy }
   ],
   bootstrap: [AppComponent]
